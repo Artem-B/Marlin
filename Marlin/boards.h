@@ -49,6 +49,7 @@
 #define BOARD_RAMPS_PLUS_EEF   146    // RAMPS Plus 3DYMY (Power outputs: Hotend0, Hotend1, Fan)
 #define BOARD_RAMPS_PLUS_SF    148    // RAMPS Plus 3DYMY (Power outputs: Spindle, Controller Fan)
 
+#define BOARD_RAMPS_OLD        149    // Trinamic TRAMS board
 //
 // RAMPS Derivatives - ATmega1280, ATmega2560
 //

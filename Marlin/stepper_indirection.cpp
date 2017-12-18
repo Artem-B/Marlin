@@ -169,6 +169,8 @@
     _TMC2130_DEFINE(E4);
   #endif
 
+
+  constexpr unsigned long tmc2130_freq = TMC2130_FREQ;
   // Use internal reference voltage for current calculations. This is the default.
   // Following values from Trinamic's spreadsheet with values for a NEMA17 (42BYGHW609)
   // https://www.trinamic.com/products/integrated-circuits/details/tmc2130/
@@ -190,8 +192,10 @@
       st.stealth_amplitude(255);
       st.stealthChop(1);
       #if ENABLED(HYBRID_THRESHOLD)
-        st.stealth_max_speed(12650000UL*microsteps/(256*thrs*spmm));
+        st.stealth_max_speed(tmc2130_freq*microsteps/(256*thrs*spmm));
       #else
+        // Set threshold to max. Disables dcStep.
+        //st.stealth_max_speed(1024UL * 1024UL - 1UL);
         UNUSED(thrs);
         UNUSED(spmm);
       #endif
