@@ -1126,12 +1126,16 @@
    * Too low values can lead to false positives, while too high values will collide the axis without triggering.
    * It is advised to set X/Y_HOME_BUMP_MM to 0.
    * M914 X/Y to live tune the setting
+   *
+   * X/Y_DIAG_PIN controls which diag pin on TCM2130 outputs the stall signal.
    */
-  //#define SENSORLESS_HOMING // TMC2130 only
+  #define SENSORLESS_HOMING // TMC2130 only
 
   #if ENABLED(SENSORLESS_HOMING)
     #define X_HOMING_SENSITIVITY  8
     #define Y_HOMING_SENSITIVITY  8
+    #define X_DIAG_PIN            0
+    #define Y_DIAG_PIN            1
   #endif
 
   /**
@@ -1152,7 +1156,19 @@
    *   stepperY.interpolate(0); \
    * }
    */
-  #define  TMC_ADV() {  }
+
+  // TRAMS board wire-ORs diag signals from all drivers.
+  // Active-low open drain is the only way it will work.
+  #define  TMC_ADV() { \
+    stepperX.diag0_active_high(0); \
+    stepperX.diag1_active_high(0); \
+    stepperY.diag0_active_high(0); \
+    stepperY.diag1_active_high(0); \
+    stepperZ.diag0_active_high(0); \
+    stepperZ.diag1_active_high(0); \
+    stepperE0.diag0_active_high(0); \
+    stepperE0.diag1_active_high(0); \
+  }
 
 #endif // TMC2130 || TMC2208
 
@@ -1363,7 +1379,7 @@
 /**
  * M43 - display pin status, watch pins for changes, watch endstops & toggle LED, Z servo probe test, toggle pins
  */
-//#define PINS_DEBUGGING
+#define PINS_DEBUGGING
 
 /**
  * Auto-report temperatures with M155 S<seconds>

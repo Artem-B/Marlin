@@ -2880,7 +2880,7 @@ static void do_homing_move(const AxisEnum axis, const float distance, const floa
  */
 #if ENABLED(SENSORLESS_HOMING)
   template<typename TMC>
-  void tmc_sensorless_homing(TMC &st, bool enable=true) {
+  void tmc_sensorless_homing(TMC &st, int diag_pin, bool enable=true) {
     #if ENABLED(STEALTHCHOP)
       if (enable) {
         st.coolstep_min_speed(1024UL * 1024UL - 1UL);
@@ -2891,8 +2891,9 @@ static void do_homing_move(const AxisEnum axis, const float distance, const floa
         st.stealthChop(1);
       }
     #endif
-
-    st.diag1_stall(enable ? 1 : 0);
+      st.diag0_stall(enable ? 1 : 0);
+    else
+      st.diag1_stall(enable ? 1 : 0);
   }
 #endif
 
@@ -2953,10 +2954,10 @@ static void homeaxis(const AxisEnum axis) {
   // Disable stealthChop if used. Enable diag1 pin on driver.
   #if ENABLED(SENSORLESS_HOMING)
     #if ENABLED(X_IS_TMC2130)
-      if (axis == X_AXIS) tmc_sensorless_homing(stepperX);
+      if (axis == X_AXIS) tmc_sensorless_homing(stepperX, X_DIAG_PIN);
     #endif
     #if ENABLED(Y_IS_TMC2130)
-      if (axis == Y_AXIS) tmc_sensorless_homing(stepperY);
+      if (axis == Y_AXIS) tmc_sensorless_homing(stepperY, Y_DIAG_PIN);
     #endif
   #endif
 
@@ -3060,13 +3061,13 @@ static void homeaxis(const AxisEnum axis) {
 
   #endif
 
-  // Re-enable stealthChop if used. Disable diag1 pin on driver.
+  // Re-enable stealthChop if used. Disable diag pin on driver.
   #if ENABLED(SENSORLESS_HOMING)
     #if ENABLED(X_IS_TMC2130)
-      if (axis == X_AXIS) tmc_sensorless_homing(stepperX, false);
+      if (axis == X_AXIS) tmc_sensorless_homing(stepperX, X_DIAG_PIN, false);
     #endif
     #if ENABLED(Y_IS_TMC2130)
-      if (axis == Y_AXIS) tmc_sensorless_homing(stepperY, false);
+      if (axis == Y_AXIS) tmc_sensorless_homing(stepperY, Y_DIAG_PIN, false);
     #endif
   #endif
 
@@ -10265,13 +10266,7 @@ inline void gcode_M502() {
     static void drv_status_print_hex(const char name[], const uint32_t drv_status) {
       SERIAL_ECHO(name);
       SERIAL_ECHOPGM(" = 0x");
-      for(int B=24; B>=8; B-=8){
-        MYSERIAL.print((drv_status>>(B+4))&0xF, HEX);
-        MYSERIAL.print((drv_status>>B)&0xF, HEX);
-        MYSERIAL.print(':');
-      }
-      MYSERIAL.print((drv_status>>4)&0xF, HEX);
-      MYSERIAL.print((drv_status)&0xF, HEX);
+      MYSERIAL.print(drv_status, HEX);
       SERIAL_EOL();
     }
 
@@ -10367,20 +10362,30 @@ inline void gcode_M502() {
         default: tmc_status(st, i); break;
       }
     }
+    static void tmc_status_bit(bool val) { 
+      if (val) 
+        SERIAL_ECHOPGM("X");
+      else 
+        SERIAL_ECHOPGM("-");
+    }
     template <typename TMC>
     static void tmc_parse_drv_status(TMC &st, TMC_AxisEnum axis, const TMC_drv_status_enum i) {
       SERIAL_ECHOPGM("\t");
       switch(i) {
         case TMC_DRV_CODES:     SERIAL_ECHO(extended_axis_codes[axis]);  break;
-        case TMC_STST:          if (st.stst())         SERIAL_ECHOPGM("X"); break;
-        case TMC_OLB:           if (st.olb())          SERIAL_ECHOPGM("X"); break;
-        case TMC_OLA:           if (st.ola())          SERIAL_ECHOPGM("X"); break;
-        case TMC_S2GB:          if (st.s2gb())         SERIAL_ECHOPGM("X"); break;
-        case TMC_S2GA:          if (st.s2ga())         SERIAL_ECHOPGM("X"); break;
-        case TMC_DRV_OTPW:      if (st.otpw())         SERIAL_ECHOPGM("X"); break;
-        case TMC_OT:            if (st.ot())           SERIAL_ECHOPGM("X"); break;
+        case TMC_STST:          tmc_status_bit(st.stst()); break;
+        case TMC_OLB:           tmc_status_bit(st.olb()); break;
+        case TMC_OLA:           tmc_status_bit(st.ola()); break;
+        case TMC_S2GB:          tmc_status_bit(st.s2gb()); break;
+        case TMC_S2GA:          tmc_status_bit(st.s2ga()); break;
+        case TMC_DRV_OTPW:      tmc_status_bit(st.otpw()); break;
+        case TMC_OT:            tmc_status_bit(st.ot()); break;
         case TMC_DRV_CS_ACTUAL: MYSERIAL.print(st.cs_actual(), DEC);        break;
-        case TMC_DRV_STATUS_HEX:drv_status_print_hex(extended_axis_codes[axis], st.DRV_STATUS()); break;
+        case TMC_DRV_STATUS_HEX:
+            drv_status_print_hex(extended_axis_codes[axis], st.DRV_STATUS()); 
+            drv_status_print_hex(extended_axis_codes[axis], st.GCONF());
+            drv_status_print_hex(extended_axis_codes[axis], st.IOIN());
+            break;
         default: tmc_parse_drv_status(st, i); break;
       }
     }

@@ -27,6 +27,11 @@
 #define Y_MIN_PIN          5 
 #define Z_MIN_PIN          6 
 
+#if ENABLED(SENSORLESS_HOMING)
+#define X_MIN_PIN          2 
+#define Y_MIN_PIN          3 
+#endif
+
 // Fan is always on along w/ extruder.
 // Controlled via E0_AUTO_FAN_PIN 
 #undef FAN_PIN
