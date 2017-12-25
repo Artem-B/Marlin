@@ -2891,9 +2891,11 @@ static void do_homing_move(const AxisEnum axis, const float distance, const floa
         st.stealthChop(1);
       }
     #endif
+    if (diag_pin == 0) {
       st.diag0_stall(enable ? 1 : 0);
-    else
+    } else {
       st.diag1_stall(enable ? 1 : 0);
+    }
   }
 #endif
 
