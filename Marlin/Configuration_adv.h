@@ -349,8 +349,8 @@
 // @section homing
 
 // Homing hits each endstop, retracts by these distances, then does a slower bump.
-#define X_HOME_BUMP_MM 5
-#define Y_HOME_BUMP_MM 5
+#define X_HOME_BUMP_MM 0
+#define Y_HOME_BUMP_MM 0
 #define Z_HOME_BUMP_MM 2
 #define HOMING_BUMP_DIVISOR { 2, 2, 2 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 #define QUICK_HOME                     // If homing includes X and Y, do a diagonal move initially
@@ -1037,13 +1037,13 @@
   #define HOLD_MULTIPLIER    0.5  // Scales down the holding current from run current
   #define INTERPOLATE       true  // Interpolate X/Y/Z_MICROSTEPS to 256
 
-  #define X_CURRENT          940  // rms current in mA. Multiply by 1.41 for peak current.
+  #define X_CURRENT          600  // rms current in mA. Multiply by 1.41 for peak current.
   #define X_MICROSTEPS        16  // 0..256
 
-  #define Y_CURRENT          940
+  #define Y_CURRENT          600
   #define Y_MICROSTEPS        16
 
-  #define Z_CURRENT          390
+  #define Z_CURRENT          300
   #define Z_MICROSTEPS        16
 
   #define X2_CURRENT         800
@@ -1055,7 +1055,7 @@
   #define Z2_CURRENT         800
   #define Z2_MICROSTEPS       16
 
-  #define E0_CURRENT         940
+  #define E0_CURRENT         600
   #define E0_MICROSTEPS       16
 
   #define E1_CURRENT         800
@@ -1132,8 +1132,8 @@
   #define SENSORLESS_HOMING // TMC2130 only
 
   #if ENABLED(SENSORLESS_HOMING)
-    #define X_HOMING_SENSITIVITY  8
-    #define Y_HOMING_SENSITIVITY  8
+    #define X_HOMING_SENSITIVITY  3
+    #define Y_HOMING_SENSITIVITY  4
     #define X_DIAG_PIN            0
     #define Y_DIAG_PIN            1
   #endif
