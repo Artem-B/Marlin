@@ -621,6 +621,7 @@
  *
  */
 #define Z_MIN_PROBE_ENDSTOP
+#define Z_MIN_PROBE_PIN 19 // Z-MAX pin
 
 /**
  * Probe Type
@@ -843,6 +844,7 @@
   #define FIL_RUNOUT_INVERTING true // set to true to invert the logic of the sensor.
   #define ENDSTOPPULLUP_FIL_RUNOUT // Uncomment to use internal pullup for filament runout pins if the sensor is defined.
   #define FILAMENT_RUNOUT_SCRIPT "M600"
+  # define FIL_RUNOUT_PIN  2 // X-MAX
 #endif
 
 //===========================================================================
