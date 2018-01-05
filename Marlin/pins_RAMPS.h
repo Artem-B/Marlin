@@ -96,7 +96,7 @@
 #define Y_STEP_PIN         60
 #define Y_DIR_PIN          61
 #define Y_ENABLE_PIN       56
-#define Y_CS_PIN           49
+#define Y_CS_PIN           63 // A9, 49 is already used by SD_DETECT
 
 #define Z_STEP_PIN         46
 #define Z_DIR_PIN          48
