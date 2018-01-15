@@ -91,7 +91,7 @@
 #define X_STEP_PIN         54
 #define X_DIR_PIN          55
 #define X_ENABLE_PIN       38
-#define X_CS_PIN           53
+#define X_CS_PIN           64  // A10 as 53 is used for SD_SS
 
 #define Y_STEP_PIN         60
 #define Y_DIR_PIN          61
