@@ -287,16 +287,29 @@ void _tmc_say_sgt(const char name[], const uint32_t sgt) {
     TMC_S2VSB,
     TMC_S2VSA
   };
-  static void drv_status_print_hex(const char name[], const uint32_t drv_status) {
+  static void drv_status_print_hex(TMC2130Stepper &st, const char name[]) {
     SERIAL_ECHO(name);
-    SERIAL_ECHOPGM(" = 0x");
-    for (int B = 24; B >= 8; B -= 8){
-      SERIAL_PRINT((drv_status >> (B + 4)) & 0xF, HEX);
-      SERIAL_PRINT((drv_status >> B) & 0xF, HEX);
-      SERIAL_CHAR(':');
-    }
-    SERIAL_PRINT((drv_status >> 4) & 0xF, HEX);
-    SERIAL_PRINT((drv_status) & 0xF, HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("STATUS = 0x");
+    SERIAL_PRINT(st.DRV_STATUS(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("CHOPCONF = 0x");
+    SERIAL_PRINT(st.CHOPCONF(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("IHOLD_IRUN = 0x");
+    SERIAL_PRINT(st.IHOLD_IRUN(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("TPOWERDOWN = 0x");
+    SERIAL_PRINT(st.TPOWERDOWN(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("GCONF = 0x");
+    SERIAL_PRINT(st.GCONF(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("TPWMTHRS = 0x");
+    SERIAL_PRINT(st.TPWMTHRS(), HEX);
+    SERIAL_EOL();
+    SERIAL_ECHOPGM("PWMCONF = 0x");
+    SERIAL_PRINT(st.PWMCONF(), HEX);
     SERIAL_EOL();
   }
 
@@ -404,7 +417,7 @@ void _tmc_say_sgt(const char name[], const uint32_t sgt) {
       case TMC_DRV_OTPW:      if (st.otpw())         SERIAL_CHAR('X'); break;
       case TMC_OT:            if (st.ot())           SERIAL_CHAR('X'); break;
       case TMC_DRV_CS_ACTUAL: SERIAL_PRINT(st.cs_actual(), DEC);        break;
-      case TMC_DRV_STATUS_HEX:drv_status_print_hex(extended_axis_codes[axis], st.DRV_STATUS()); break;
+      case TMC_DRV_STATUS_HEX:drv_status_print_hex(st, extended_axis_codes[axis]); break;
       default: tmc_parse_drv_status(st, i); break;
     }
   }
