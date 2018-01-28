@@ -123,7 +123,7 @@
 #endif
 
 // Show extra position information in M114
-//#define M114_DETAIL
+#define M114_DETAIL
 
 // Show Temperature ADC value
 // Enable for M105 to include ADC values read from temperature sensors.
@@ -475,7 +475,7 @@
 // @section lcd
 
 // Include a page of printer information in the LCD Main Menu
-//#define LCD_INFO_MENU
+#define LCD_INFO_MENU
 
 // Leave out seldom-used LCD menu items to recover some Program Memory
 //#define SLIM_LCD_MENUS
@@ -580,7 +580,7 @@
   #endif
 
   // Add an 'M73' G-code to set the current percentage
-  //#define LCD_SET_PROGRESS_MANUALLY
+  #define LCD_SET_PROGRESS_MANUALLY
 
   // This allows hosts to request long names for files and folders with M33
   #define LONG_FILENAME_HOST_SUPPORT
@@ -636,7 +636,7 @@
 
   // Enable this option and reduce the value to optimize screen updates.
   // The normal delay is 10µs. Use the lowest value that still gives a reliable display.
-  //#define DOGM_SPI_DELAY_US 5
+  #define DOGM_SPI_DELAY_US 3
 
   // Swap the CW/CCW indicators in the graphics overlay
   //#define OVERLAY_GFX_REVERSE
@@ -825,7 +825,7 @@
 // enter the serial receive buffer, so they cannot be blocked.
 // Currently handles M108, M112, M410
 // Does not work on boards using AT90USB (USBCON) processors!
-//#define EMERGENCY_PARSER
+#define EMERGENCY_PARSER
 
 // Bad Serial-connections can miss a received command by sending an 'ok'
 // Therefore some clients abort after 30 seconds in a timeout.
@@ -834,7 +834,7 @@
 //#define NO_TIMEOUTS 1000 // Milliseconds
 
 // Some clients will have this feature soon. This could make the NO_TIMEOUTS unnecessary.
-//#define ADVANCED_OK
+#define ADVANCED_OK
 
 // @section extras
 
@@ -1052,25 +1052,25 @@
   #define HOLD_MULTIPLIER    0.5  // Scales down the holding current from run current
   #define INTERPOLATE       true  // Interpolate X/Y/Z_MICROSTEPS to 256
 
-  #define X_CURRENT          900  // rms current in mA. Multiply by 1.41 for peak current.
+  #define X_CURRENT          700  // rms current in mA. Multiply by 1.41 for peak current.
   #define X_MICROSTEPS        16  // 0..256
 
-  #define Y_CURRENT          900
+  #define Y_CURRENT          800
   #define Y_MICROSTEPS        16
 
-  #define Z_CURRENT          900
+  #define Z_CURRENT          700
   #define Z_MICROSTEPS        16
 
-  #define X2_CURRENT         800
+  #define X2_CURRENT         700
   #define X2_MICROSTEPS       16
 
   #define Y2_CURRENT         800
   #define Y2_MICROSTEPS       16
 
-  #define Z2_CURRENT         800
+  #define Z2_CURRENT         700
   #define Z2_MICROSTEPS       16
 
-  #define E0_CURRENT         900
+  #define E0_CURRENT         700
   #define E0_MICROSTEPS       16
 
   #define E1_CURRENT         800
